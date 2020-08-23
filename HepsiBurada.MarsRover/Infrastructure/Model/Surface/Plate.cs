@@ -17,8 +17,10 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Surface
         public int Width { get; private set; }
         public int Height { get; private set; }
 
-        public void AddRover(IRover rover)
+        public void AddRover(IRover rover) 
         {
+            if (rover == null)
+                throw new ArgumentNullException("argument");
             _rovers.Add(rover);
         }
 
@@ -43,6 +45,14 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Surface
             foreach (var rover in _rovers) stringBuilder.AppendLine(rover.ToString());
 
             return stringBuilder.ToString();
+        }
+        public bool IsValid(CoordinatesPoint point)
+        {
+            var widthControl = point.X <= Width && point.X >= 0;
+            var heightControl = point.Y <= Height && point.Y >= 0;
+            var roverControl = _rovers.Any(p => Equals(p.GetCompassPoints(), point));
+
+            return widthControl && heightControl && !roverControl;
         }
     }
 }

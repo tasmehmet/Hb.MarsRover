@@ -6,6 +6,6 @@ namespace HepsiBurada.MarsRover.Infrastructure.Operations.ParserOperation
 {
     public interface IParse
     {
-        void Parse(string input);
+        void Parser(string input);
     }
 }

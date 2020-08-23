@@ -10,15 +10,16 @@ namespace HepsiBurada.MarsRover.Infrastructure.Operations.ParserOperation
 {
     public class Parse : IParse
     {
-        public readonly IRotateAndMoveOperation _rotateAndMove;
+        private readonly IRotateAndMoveOperation _rotateAndMove;
+
         public Parse(IRotateAndMoveOperation rotateAndMove)
         {
             _rotateAndMove = rotateAndMove;
         }
 
-        void IParse.Parse(string input)
+        void IParse.Parser(string input)
         {
-            var commandList = input.Split(Environment.NewLine,StringSplitOptions.RemoveEmptyEntries);
+            var commandList = input.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < commandList.Length; i++)
             {
                 var command = commandList[i];
@@ -30,12 +31,15 @@ namespace HepsiBurada.MarsRover.Infrastructure.Operations.ParserOperation
                         break;
                     case int n when i % 2 == 1:
                         (CoordinatesPoint point, CompassPoints cp) = ParseCurrentPosition(command);
-                        _rotateAndMove.SetRoverCurrentPosition(point,cp);
+                        _rotateAndMove.SetRoverCurrentPosition(point, cp);
                         break;
                     case int n when i % 2 == 0:
                         var movements = ParseMovement(command);
                         _rotateAndMove.Movement(movements);
                         break;
+                    default:
+                        throw new NotImplementedException();
+
                 }
             }
         }

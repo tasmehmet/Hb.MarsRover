@@ -38,7 +38,7 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Rover
         }
         public override string ToString()
         {
-            return $"{X} - {Y}";
+            return $"{X} {Y}";
         }
     }
 }

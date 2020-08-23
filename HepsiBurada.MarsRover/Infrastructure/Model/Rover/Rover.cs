@@ -27,7 +27,33 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Rover
             return _coordinatesPoint;
         }
 
+
         public void Move(IEnumerable<StringMovement> movements, IPlate plate)
+        {
+            foreach (var movement in movements)
+                switch (movement)
+                {
+                    case StringMovement.L:
+                        MoveLeft();
+                        break;
+                    case StringMovement.M:
+                        var nextPosition = Move();
+                        SetRoverPosition(plate, nextPosition);
+                        break;
+                    case StringMovement.R:
+                        MoveRight();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+        }
+
+        private void SetRoverPosition(IPlate plateau, CoordinatesPoint nextPosition)
+        {
+            _coordinatesPoint = nextPosition;
+        }
+
+        private CoordinatesPoint Move()
         {
             var newCoordinatesPoint = new CoordinatesPoint(_coordinatesPoint.X, _coordinatesPoint.Y);
             switch (_compassPoints)
@@ -45,9 +71,11 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Rover
                     newCoordinatesPoint.SetBackwardX();
                     break;
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException(); 
             }
+            return newCoordinatesPoint;
         }
+
         public void MoveLeft()
         {
             switch (_compassPoints)
@@ -90,7 +118,7 @@ namespace HepsiBurada.MarsRover.Infrastructure.Model.Rover
         }
         public override string ToString()
         {
-            return $"{_coordinatesPoint} - {_compassPoints.ToString()}";
+            return $"{_coordinatesPoint} {_compassPoints.ToString()}";
         }
     }
 }
